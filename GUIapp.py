@@ -5,29 +5,34 @@ Height = 500
 Width = 600
 
 
-def trigger(entry):
+def trigger_r(entry):
     print("This is the entry", entry)  # Used function to check if button's been pressed
 
 # e0fbe9c3531609ff52c56c521b3907ab
 # api.openweathermap.org/data/2.5/forecast?q={city name},{country code}
 
 
-def format(weather):
-    name = weather['name']
-    desc = weather['weather'][0]['description']
-    temp = weather['main']['temp']
+def format_r(weather):
+    try:
+        name = weather['name']
+        desc = weather['weather'][0]['description']
+        temp = weather['main']['temp']
 
-    return str(name) + '' + str(desc) + '' + str(temp)
+        final_str = 'City: %s \nConditions: %s \nTemperature (C): %s' % (name, desc, temp)
+    except ImportError:
+        final_str = 'There was a problem retrieving that information'
+
+    return final_str
 
 
 def get_weather(city):
     weather_key = "e0fbe9c3531609ff52c56c521b3907ab"
     url = "https://api.openweathermap.org/data/2.5/forecast"
-    params = {"APPID": weather_key, "q": city, "units": "imperial"}
+    params = {"APPID": weather_key, "q": city, "units": "metric"}
     response = requests.get(url, params=params)
     weather = response.json()
 
-    label['text'] = format(weather)
+    label['text'] = format_r(weather)
 
 
 root = tk.Tk()  # This is to make the actual blank border window. Places everything into this window
